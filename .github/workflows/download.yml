@@ -5,13 +5,18 @@ jobs:
   download_files:
     runs-on: ubuntu-latest
     steps:
-    - name: Download from HF Mirror
+    - name: Download Real OpenVINO IR Files
       run: |
         mkdir models
         cd models
-        # Скачиваем через проверенное и незаблокированное зеркало, где лежат оригинальные FP16 файлы
-        curl -L "https://hf-mirror.com" -o ddcolor.xml
-        curl -L "https://hf-mirror.com" -o ddcolor.bin
+        # Скачиваем оригинальные рабочие файлы FP16 напрямую из репозитория OpenVINO Notebooks
+        curl -L "https://githubusercontent.com" -o ddcolor.xml
+        curl -L "https://githubusercontent.com" -o ddcolor.bin
+
+    - name: Check file sizes
+      run: |
+        ls -lh models/
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
