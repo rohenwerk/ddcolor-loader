@@ -5,12 +5,13 @@ jobs:
   download_files:
     runs-on: ubuntu-latest
     steps:
-    - name: Download from Intel Storage
+    - name: Download from HF Mirror
       run: |
         mkdir models
         cd models
-        curl -L "https://openvinotoolkit.org" -o ddcolor.xml
-        curl -L "https://openvinotoolkit.org" -o ddcolor.bin
+        # Скачиваем через проверенное и незаблокированное зеркало, где лежат оригинальные FP16 файлы
+        curl -L "https://hf-mirror.com" -o ddcolor.xml
+        curl -L "https://hf-mirror.com" -o ddcolor.bin
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
