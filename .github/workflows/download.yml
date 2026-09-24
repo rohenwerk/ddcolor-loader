@@ -5,13 +5,23 @@ jobs:
   download_files:
     runs-on: ubuntu-latest
     steps:
-    - name: Download Real OpenVINO IR Files
+    - name: Clone OpenVINO Repository via Git LFS
       run: |
-        mkdir models
-        cd models
-        # Скачиваем оригинальные рабочие файлы FP16 напрямую из репозитория OpenVINO Notebooks
-        curl -L "https://githubusercontent.com" -o ddcolor.xml
-        curl -L "https://githubusercontent.com" -o ddcolor.bin
+        # Включаем поддержку больших файлов
+        git lfs install
+        
+        # Клонируем только нужную папку с моделью (без лишнего мусора)
+        git clone --depth 1 --filter=blob:none --sparse https://github.com
+        cd openvino_notebooks
+        git sparse-checkout set notebooks/ddcolor-image-colorization
+        
+        # Принудительно выкачиваем оригинальные тяжелые .bin и .xml файлы
+        git lfs pull
+        
+        # Переносим файлы в отдельную папку для отправки
+        mkdir ../models
+        cp notebooks/ddcolor-image-colorization/ddcolor.xml ../models/
+        cp notebooks/ddcolor-image-colorization/ddcolor.bin ../models/
 
     - name: Check file sizes
       run: |
